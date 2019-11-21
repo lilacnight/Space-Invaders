@@ -1,4 +1,4 @@
-#include <math>
+#include <cmath>
 #include <iostream>
 extern "C"{
 #include "gfx.h"
