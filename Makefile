@@ -1,3 +1,6 @@
 CXXFLAGS=-g
-LDLIBS=-lXll -lstdc++
-make: SpacePotaters.o gfx.o
+LDLIBS=-lX11 -lstdc++ -lm
+SpacePotaters: SpacePotaters.o gfx.o
+
+clean:
+	rm -f SpacePotaters *.o
