@@ -55,7 +55,7 @@ int main()
 		{
 			//Keep drawing
 			//sleep(100);
-			std::cout << "Drawing..."
+			std::cout << "Drawing..." << std::endl;
 		}
 	}
 }
