@@ -1,4 +1,6 @@
+extern "C"{
 #include "gfx.h"
+}
 #include <iostream>
 class AlienBase
 {
@@ -47,10 +49,10 @@ class AlienBase
 		}
 		if(move_right)
 		{
-			x = x + 20;
+			x = x + 1;
 		}
 		else
-			x = x -20;
+			x = x -1;
 		draw_alien();
 	}
 
