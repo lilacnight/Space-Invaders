@@ -3,6 +3,7 @@
 extern "C"{
 #include "gfx.h"
 }
+#include "Aliens.h"
 
 void draw_polygon(int *x, int *y, int n, bool closed = false)
 {
@@ -37,11 +38,14 @@ int main()
 	int x[] = {30, 50, 23, 17, 120};
 	int y[] = {12, 55, 52, 19, 100};
 
-	gfx_color(255, 0, 0);
-	draw_polygon(x, y, 5);
+	//gfx_color(255, 0, 0);
+	//draw_polygon(x, y, 5);
 	gfx_color(0, 255, 0);
-	draw_circle(250, 250, 50);
-
+	//draw_circle(250, 250, 50);
+	
+	AlienBase alien1(250, 250);
+	alien1.print();
+	alien1.draw_base();
 	while(true)
 	{
 		if(gfx_event_waiting())
@@ -51,11 +55,6 @@ int main()
 			if(button == 'x')
 				break;
 		}
-		else
-		{
-			//Keep drawing
-			//sleep(100);
-			std::cout << "Drawing..." << std::endl;
-		}
 	}
 }
+
