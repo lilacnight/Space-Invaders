@@ -46,7 +46,7 @@ int main()
 	
 	GreenAlien alien1(250, 250);
 	alien1.print();
-	alien1.draw_base();
+	alien1.draw_alien();
 	RedAlien alien2(100, 50);
 	alien2.draw_alien();
 	BlueAlien alien3(200, 50);
@@ -65,9 +65,9 @@ int main()
 		{
 			usleep(400000);
 			gfx_clear();
-			alien1.move_right();
-			alien2.move_right();
-			alien3.move_right();
+			alien1.move();
+			alien2.move();
+			alien3.move();
 		}
 
 
