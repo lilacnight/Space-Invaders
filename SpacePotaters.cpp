@@ -1,4 +1,5 @@
 #include <cmath>
+#include <unistd.h>
 #include <iostream>
 extern "C"{
 #include "gfx.h"
@@ -43,9 +44,14 @@ int main()
 	gfx_color(0, 255, 0);
 	//draw_circle(250, 250, 50);
 	
-	AlienBase alien1(250, 250);
+	GreenAlien alien1(250, 250);
 	alien1.print();
 	alien1.draw_base();
+	RedAlien alien2(100, 50);
+	alien2.draw_alien();
+	BlueAlien alien3(200, 50);
+	alien3.draw_alien();
+
 	while(true)
 	{
 		if(gfx_event_waiting())
@@ -55,6 +61,16 @@ int main()
 			if(button == 'x')
 				break;
 		}
+		else
+		{
+			usleep(400000);
+			gfx_clear();
+			alien1.move_right();
+			alien2.move_right();
+			alien3.move_right();
+		}
+
+
 	}
 }
 
