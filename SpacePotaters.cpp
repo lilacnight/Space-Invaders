@@ -5,6 +5,7 @@ extern "C"{
 #include "gfx.h"
 }
 #include "Aliens.h"
+#include "BattleShips.h"
 
 void draw_polygon(int *x, int *y, int n, bool closed = false)
 {
@@ -51,23 +52,38 @@ int main()
 	alien2.draw_alien();
 	BlueAlien alien3(200, 50);
 	alien3.draw_alien();
+	ship_base ship;
+	ship.draw_base();
 
 	while(true)
 	{
 		if(gfx_event_waiting())
 		{
 			int button = gfx_wait();
-			std::cout << "got event: " << button << std::endl;
+			// left arrow
+			if (button == 81 || button == 65430 || button == 65361)
+			{
+			//	gfx_clear();
+				ship.move_left();
+			}
+			// right arrow
+			if (button == 83 || button == 65432 || button == 65363)
+			{
+			//	gfx_clear();
+				ship.move_right();
+			}
+		//	std::cout << "got event: " << button << std::endl;
 			if(button == 'x')
 				break;
 		}
 		else
 		{
-			usleep(400000);
+			usleep(10000);
 			gfx_clear();
 			alien1.move();
 			alien2.move();
 			alien3.move();
+			ship.draw_base();
 		}
 
 
