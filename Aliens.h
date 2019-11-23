@@ -1,4 +1,6 @@
+extern "C"{
 #include "gfx.h"
+}
 #include <iostream>
 class AlienBase
 {
