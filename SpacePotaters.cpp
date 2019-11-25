@@ -6,33 +6,7 @@ extern "C"{
 }
 #include "Aliens.h"
 #include "BattleShips.h"
-
-void draw_polygon(int *x, int *y, int n, bool closed = false)
-{
-	for(int i = 0; i < n-1; i++)
-	{
-		gfx_line(x[i], y[i], x[i+1], y[i+1]);
-	}
-	if(closed)
-	{
-		gfx_line(x[0], y[0], x[n-1], y[n-1]);
-	}
-}
-
-void draw_circle(int xc, int yc, int radius)
-{
-	int x[18];
-	int y[18];
-	for(int i = 0; i < 18; i++)
-	{
-		double angle = i*20.0*3.141592654/180;
-		x[i] = xc + cos(angle)*radius;
-		y[i] = yc + sin(angle)*radius;
-	}
-
-	draw_polygon(x, y, 18, true);
-}
-
+#include <vector>
 int main()
 {
 	gfx_open(500, 500, "Space Potaters");
@@ -55,6 +29,9 @@ int main()
 	ship_base ship;
 	ship.draw_base();
 
+	std::vector<bullet> bullet_list;
+
+
 	while(true)
 	{
 		if(gfx_event_waiting())
@@ -72,18 +49,34 @@ int main()
 			//	gfx_clear();
 				ship.move_right();
 			}
-		//	std::cout << "got event: " << button << std::endl;
+			if (button == 82 || button == 65431 || button == 65362)
+			{
+				bullet new_bullet(ship.x_val(), ship.y_val());
+				std::cout << ship.x_val() << ship.y_val() << std::endl;
+				bullet_list.push_back(new_bullet);
+			}
+			std::cout << "got event: " << button << std::endl;
 			if(button == 'x')
 				break;
 		}
 		else
 		{
-			usleep(10000);
+			usleep(100000);
 			gfx_clear();
 			alien1.move();
 			alien2.move();
 			alien3.move();
 			ship.draw_base();
+			for (int i = 0; i < bullet_list.size(); i++)
+			{
+				bullet& temp = bullet_list[i];
+				std::cout << " bullet" << std::endl;
+				temp.move();
+				if(temp.y_pos() < 0)
+				{
+					bullet_list.erase(bullet_list.begin()+i);
+				}
+			}
 		}
 
 
