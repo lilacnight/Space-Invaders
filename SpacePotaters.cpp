@@ -18,7 +18,7 @@ int main()
 	//draw_polygon(x, y, 5);
 	gfx_color(0, 255, 0);
 	//draw_circle(250, 250, 50);
-	
+
 	GreenAlien alien1(250, 250);
 	alien1.print();
 	alien1.draw_alien();
@@ -51,9 +51,7 @@ int main()
 			}
 			if (button == 82 || button == 65431 || button == 65362)
 			{
-				bullet new_bullet(ship.x_val(), ship.y_val());
-				std::cout << ship.x_val() << ship.y_val() << std::endl;
-				bullet_list.push_back(new_bullet);
+				ship.fire();
 			}
 			std::cout << "got event: " << button << std::endl;
 			if(button == 'x')
@@ -61,12 +59,16 @@ int main()
 		}
 		else
 		{
-			usleep(100000);
+			usleep(16667);
 			gfx_clear();
 			alien1.move();
 			alien2.move();
 			alien3.move();
 			ship.draw_base();
+			for(int i = 0; i < ship.playerbullets.size(); i++)
+			{
+				ship.playerbullets[i].move();
+			}
 			for (int i = 0; i < bullet_list.size(); i++)
 			{
 				bullet& temp = bullet_list[i];
@@ -82,4 +84,3 @@ int main()
 
 	}
 }
-

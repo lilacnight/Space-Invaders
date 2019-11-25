@@ -2,13 +2,59 @@ extern "C"{
 #include "gfx.h"
 }
 #include <unistd.h>
+#include <vector>
+#include <iostream>
+
+class bullet
+{
+protected:
+	bool fromPlayer;
+	int x_origin;
+	int y_origin;
+	int speed;
+	bool up;
+
+public:
+	bullet(int x, int y, bool up = true, int speed = 5, bool fromPlayer = true)
+	{
+		x_origin = x;
+		y_origin = y;
+		up = up;
+		speed = speed;
+		std::cout << "Bullet Made" << std::endl;
+	}
+	int y_pos()
+	{
+		return y_origin;
+	}
+	void draw_bullet(int x, int y)
+	{
+		std::cout << "Drawing Bullet..." << std::endl;
+		gfx_color(255, 255, 255);
+		gfx_line(x, y, x, (y - 50));
+	}
+	void move()
+	{
+		if(up)
+		{
+			y_origin = y_origin - speed * 0.5;
+		}
+		else
+		{
+			y_origin = y_origin + speed * 0.5;
+		}
+		draw_bullet(x_origin, y_origin);
+	}
+};
+
 class ship_base
 {
 	protected:
 	int x;
 	int y;
-	
+
 	public:
+	std::vector<bullet> playerbullets;
 	ship_base()
 	{
 		x = 20;
@@ -45,40 +91,10 @@ class ship_base
 			x = x - 6;
 			draw_ship();
 	}
-			
-};
 
-class bullet
-{
-	protected:
-	int x_orgin;
-	int y_orgin;
-	int speed;
-	bool up;
-	
-	public:
-	bullet(int x, int y, bool up = true, int speed = 5)
+	void fire()
 	{
-		x_orgin = x;
-		y_orgin = y;
-		up = up; 
-		speed = speed;
-	}
-	int y_pos()
-	{
-		return y_orgin;
-	}
-	void move()
-	{
-		if(up)
-		{
-			y_orgin = y_orgin - speed;
-			gfx_line(x_orgin, y_orgin, x_orgin, (y_orgin - 10));
-		}
-		else
-		{
-			y_orgin = y_orgin + speed;
-			gfx_line(x_orgin, y_orgin, x_orgin,(y_orgin + 10));
-		}
+		bullet b(x, y);
+		playerbullets.push_back(b);
 	}
 };
