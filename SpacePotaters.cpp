@@ -54,7 +54,7 @@ int main()
 				ship.fire();
 			}
 			std::cout << "got event: " << button << std::endl;
-			if(button == 'x')
+			if(button == 27)
 				break;
 		}
 		else
@@ -68,16 +68,11 @@ int main()
 			for(int i = 0; i < ship.playerbullets.size(); i++)
 			{
 				ship.playerbullets[i].move();
-			}
-			for (int i = 0; i < bullet_list.size(); i++)
-			{
-				bullet& temp = bullet_list[i];
-				std::cout << " bullet" << std::endl;
-				temp.move();
-				if(temp.y_pos() < 0)
-				{
-					bullet_list.erase(bullet_list.begin()+i);
-				}
+                if(ship.playerbullets[i].getY() < 0)
+                {
+                    ship.playerbullets.erase(ship.playerbullets.begin() + i);
+                    std::cout << "Bullet deleted" << std::endl;
+                }
 			}
 		}
 

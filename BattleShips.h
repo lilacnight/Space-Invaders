@@ -8,43 +8,40 @@ extern "C"{
 class bullet
 {
 protected:
-	bool fromPlayer;
-	int x_origin;
-	int y_origin;
+	int x_pos;
+	int y_pos;
 	int speed;
 	bool up;
 
 public:
-	bullet(int x, int y, bool up = true, int speed = 5, bool fromPlayer = true)
+	bullet(int x, int y, bool up = true, int speed = 4)
 	{
-		x_origin = x;
-		y_origin = y;
+		x_pos = x;
+		y_pos = y;
 		up = up;
 		speed = speed;
 		std::cout << "Bullet Made" << std::endl;
 	}
-	int y_pos()
+	int getY()
 	{
-		return y_origin;
+		return y_pos;
 	}
-	void draw_bullet(int x, int y)
+	void draw()
 	{
-		std::cout << "Drawing Bullet..." << std::endl;
 		gfx_color(255, 255, 255);
-		gfx_line(x, y, x, (y - 50));
+		gfx_line(x_pos, y_pos, x_pos, y_pos - 10);
 	}
 	void move()
 	{
-		if(up)
-		{
-			y_origin = y_origin - speed * 0.5;
-		}
-		else
-		{
-			y_origin = y_origin + speed * 0.5;
-		}
-		draw_bullet(x_origin, y_origin);
+        std::cout << y_pos << std::endl;
+		y_pos = y_pos - 5;
+        std::cout << y_pos << std::endl;
+		draw();
 	}
+    void update()
+    {
+        move();
+    }
 };
 
 class ship_base
@@ -94,7 +91,7 @@ class ship_base
 
 	void fire()
 	{
-		bullet b(x, y);
+        bullet b(x, y-2);
 		playerbullets.push_back(b);
 	}
 };
