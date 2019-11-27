@@ -7,6 +7,8 @@ extern "C"{
 #include "Aliens.h"
 #include "BattleShips.h"
 #include <vector>
+#include <time.h>
+#include <string>
 int main()
 {
 	gfx_open(500, 500, "Space Potaters");
@@ -30,24 +32,32 @@ int main()
 	ship.draw_base();
 
 	std::vector<bullet> bullet_list;
-
-
+	std::string dir = " ";
+    clock_t deltaT;
+    double dt;
 	while(true)
 	{
+        deltaT = clock();
 		if(gfx_event_waiting())
 		{
 			int button = gfx_wait();
 			// left arrow
-			if (button == 81 || button == 65430 || button == 65361)
+			if ((button == 81 || button == 65430 || button == 65361)&&(dir != "L"))
 			{
 			//	gfx_clear();
-				ship.move_left();
+			//	ship.move_left();
+				dir = "L";
 			}
 			// right arrow
-			if (button == 83 || button == 65432 || button == 65363)
+			else if ((button == 83 || button == 65432 || button == 65363)&&(dir != "R"))
 			{
 			//	gfx_clear();
-				ship.move_right();
+			//	ship.move_right();
+				dir = "R";
+			}
+			else if((button != 83 || button != 82 || button != 65430 || button != 65361 || button != 65432 || button != 65363)&&(dir == "L" || dir == "R"))
+			{
+				dir = " ";
 			}
 			if (button == 82 || button == 65431 || button == 65362)
 			{
@@ -61,13 +71,18 @@ int main()
 		{
 			usleep(16667);
 			gfx_clear();
-			alien1.move();
+            deltaT = (clock() - deltaT);
+            dt = (double)deltaT/1000.0f;
+
+            //Update movement after calculating deltaT
+            alien1.move();
 			alien2.move();
 			alien3.move();
+            ship.move(dir, dt);
 			ship.draw_base();
 			for(int i = 0; i < ship.playerbullets.size(); i++)
 			{
-				ship.playerbullets[i].move();
+				ship.playerbullets[i].move(dt);
                 if(ship.playerbullets[i].getY() < 0)
                 {
                     ship.playerbullets.erase(ship.playerbullets.begin() + i);
@@ -75,7 +90,5 @@ int main()
                 }
 			}
 		}
-
-
 	}
 }

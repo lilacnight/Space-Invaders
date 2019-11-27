@@ -4,22 +4,24 @@ extern "C"{
 #include <unistd.h>
 #include <vector>
 #include <iostream>
+#include <string>
 
 class bullet
 {
 protected:
 	int x_pos;
-	int y_pos;
-	int speed;
+	double y_pos;
+	int y_vel;
 	bool up;
+    std::vector<int> bounds;
 
 public:
-	bullet(int x, int y, bool up = true, int speed = 4)
+	bullet(int x, int y, bool up = true, int speed = 30)
 	{
 		x_pos = x;
 		y_pos = y;
 		up = up;
-		speed = speed;
+		y_vel = speed;
 		std::cout << "Bullet Made" << std::endl;
 	}
 	int getY()
@@ -30,17 +32,16 @@ public:
 	{
 		gfx_color(255, 255, 255);
 		gfx_line(x_pos, y_pos, x_pos, y_pos - 10);
+        bounds = {x_pos, y_pos, x_pos, y_pos - 10};
 	}
-	void move()
+	void move(double dt)
 	{
-        std::cout << y_pos << std::endl;
-		y_pos = y_pos - 5;
-        std::cout << y_pos << std::endl;
+		y_pos -= y_vel * dt;
 		draw();
 	}
-    void update()
+    void update(float dt)
     {
-        move();
+        move(dt);
     }
 };
 
@@ -51,11 +52,16 @@ class ship_base
 	int y;
 
 	public:
+	float dt;
+	float acc;
+    float vel;
 	std::vector<bullet> playerbullets;
+    std::vector<std::vector<int>> bounds;
 	ship_base()
 	{
 		x = 20;
 		y = gfx_ysize() - 30;
+		vel = 30.0f;
 	}
 	int x_val()
 	{
@@ -65,28 +71,38 @@ class ship_base
 	{
 		return y;
 	}
+
 	void draw_base()
 	{
 		gfx_color(255, 0, 255);
 		gfx_line(x, y, x - 10, y + 20);
 		gfx_line(x - 10, y + 20, x + 10, y + 20);
 		gfx_line(x + 10, y + 20, x, y);
+
+        bounds[0] = {x, y, x - 10, y + 20};
+        bounds[1] = {x - 10, y + 20, x + 10, y + 20};
+        bounds[2] = {x + 10, y + 20, x, y};
 	}
+
 	virtual void draw_ship()
 	{
 		draw_base();
 	}
-	void move_right()
+
+	void move(std::string dir, double dt)
 	{
-		if(!(x + 17 > gfx_xsize()))
-			x = x + 6;
-			draw_ship();
-	}
-	void move_left()
-	{
-		if(!(x - 17 <= 0))
-			x = x - 6;
-			draw_ship();
+        if(dir == "R")
+        {
+		    if(!(x + 17 > gfx_xsize()))
+			    x += vel * dt;
+        }
+        else if(dir == "L")
+        {
+            if(!(x - 17 <= 0))
+    			x -= vel * dt;
+        }
+        
+		draw_ship();
 	}
 
 	void fire()

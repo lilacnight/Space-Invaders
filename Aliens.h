@@ -2,6 +2,7 @@ extern "C"{
 #include "gfx.h"
 }
 #include <iostream>
+#include <vector>
 class AlienBase
 {
 
@@ -11,7 +12,7 @@ class AlienBase
 	bool move_right;
 
 	public:
-
+    std::vector<std::vector<int>> bounds;
 	AlienBase(int xi, int yi)
 	{
 		x = xi;
@@ -31,6 +32,13 @@ class AlienBase
 		gfx_line(x, (y + 20), (x + 20), (y + 10));
 		gfx_line((x + 20), (y + 10), (x + 10), y);
 		gfx_line((x + 10), y, x, y);
+
+        bounds[0] = {x, y, (x-10), y};
+        bounds[1] = {(x - 10), y, (x - 20), (y + 10)};
+		bounds[2] = {(x - 20), (y + 10), x, (y + 20)};
+		bounds[3] = {x, (y + 20), (x + 20), (y + 10)};
+		bounds[4] = {(x + 20), (y + 10), (x + 10), y};
+		bounds[5] = {(x + 10), y, x, y};
 	}
 	virtual void draw_alien()
 	{
