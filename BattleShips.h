@@ -13,16 +13,16 @@ protected:
 	double y_pos;
 	int y_vel;
 	bool up;
-    std::vector<int> bounds;
 
 public:
+    std::vector<int> bounds;
 	bullet(int x, int y, bool up = true, int speed = 30)
 	{
 		x_pos = x;
 		y_pos = y;
 		up = up;
 		y_vel = speed;
-		std::cout << "Bullet Made" << std::endl;
+        bounds = {0};
 	}
 	int getY()
 	{
@@ -32,7 +32,11 @@ public:
 	{
 		gfx_color(255, 255, 255);
 		gfx_line(x_pos, y_pos, x_pos, y_pos - 10);
-        bounds = {x_pos, y_pos, x_pos, y_pos - 10};
+        bounds.clear();
+        bounds.push_back(x_pos);
+        bounds.push_back((int)y_pos);
+        bounds.push_back(x_pos);
+        bounds.push_back((int)(y_pos-10));
 	}
 	void move(double dt)
 	{
@@ -79,9 +83,16 @@ class ship_base
 		gfx_line(x - 10, y + 20, x + 10, y + 20);
 		gfx_line(x + 10, y + 20, x, y);
 
-        bounds[0] = {x, y, x - 10, y + 20};
-        bounds[1] = {x - 10, y + 20, x + 10, y + 20};
-        bounds[2] = {x + 10, y + 20, x, y};
+        std::vector<int> bound = {x, y, x - 10, y + 20};
+        bounds.push_back(bound);
+        bound.clear();
+        bound = {x - 10, y + 20, x + 10, y + 20};
+        bounds.push_back(bound);
+        bound.clear();
+        bound = {x + 10, y + 20, x, y};
+        bounds.push_back(bound);
+        bound.clear();
+
 	}
 
 	virtual void draw_ship()
