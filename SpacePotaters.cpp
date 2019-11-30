@@ -51,9 +51,12 @@ int main()
 	//draw_polygon(x, y, 5);
 	gfx_color(0, 255, 0);
 	//draw_circle(250, 250, 50);
+	AlienArmy army(4, 7);
 
+	gfx_flush();
+	usleep(4000000);
+	
 	GreenAlien alien1(250, 250);
-	alien1.print();
 	alien1.draw_alien();
 	RedAlien alien2(100, 50);
 	alien2.draw_alien();

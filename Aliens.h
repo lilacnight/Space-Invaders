@@ -3,6 +3,8 @@ extern "C"{
 }
 #include <iostream>
 #include <vector>
+#include <stdlib.h>
+#include <time.h>
 class AlienBase
 {
 
@@ -12,13 +14,13 @@ class AlienBase
 	bool move_right;
 
 	public:
-    std::vector<std::vector<int>> bounds;
+      std::vector<std::vector<int>> bounds;
 	AlienBase(int xi, int yi)
 	{
 		x = xi;
 		y = yi;
 		move_right = true;
-        bounds = {{0}, {0}, {0}, {0}, {0}, {0}};
+       	bounds = {{0}, {0}, {0}, {0}, {0}, {0}};
 	}
 	void print()
 	{
@@ -135,5 +137,70 @@ class BlueAlien : public AlienBase
 	{
 		gfx_color(0, 0, 255);
 		draw_base();
+	}
+};
+
+class AlienArmy
+{
+	private:
+	int rows;
+	int columns;
+	public:
+	AlienArmy(int r, int c)
+	{
+		rows = r;
+		columns = c;
+		build_army();
+	}
+
+	void build_army()
+	{
+
+		srand(time(0));
+		for(int i = 0; i < rows; i++)
+		{
+			int color = rand() % 3;
+			std::cout << color << std::endl;
+			add_row(i, color);
+		}
+	}
+	void add_row(int row, int color)
+	{
+		
+		int col_inc = gfx_xsize() / columns;
+		if(color == 0)
+		{
+			std::vector<RedAlien> alien_row;
+			for(int i = 0; i < columns; i++)
+			{
+				RedAlien alien(((col_inc / 2) + col_inc*i),
+						row*50 + 25);
+				alien.draw_alien();
+				alien_row.push_back(alien);
+			}
+		}
+		else if(color == 1)
+		{
+			std::vector<BlueAlien> alien_row;
+			for(int i = 0; i < columns; i++)
+			{
+				BlueAlien alien(((col_inc / 2) + col_inc*i),
+                                                row*50 + 25);
+				alien.draw_alien();
+				alien_row.push_back(alien);
+			}
+		}
+
+		else if(color == 2)
+		{
+			std::vector<GreenAlien> alien_row;
+			for(int i = 0; i < columns; i++)
+			{
+				GreenAlien alien(((col_inc / 2) + col_inc*i),
+                                                row*50 + 25);
+				alien.draw_alien();
+				alien_row.push_back(alien);
+			}
+		}
 	}
 };
