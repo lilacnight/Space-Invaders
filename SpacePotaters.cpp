@@ -128,11 +128,12 @@ int main()
             dt = (double)deltaT/1000.0f;
 
             //Update movement after calculating deltaT
-            alien1.move();
+       	    army.move_army();
+       	    alien1.move();
 			alien2.move();
 			alien3.move();
-			for(auto alien: aliens)
-				alien.move();
+			//for(auto alien: aliens)
+			//	alien.move();
 			ship.move(dir, dt);
 			ship.draw_base();
 			for(int i = 0; i < ship.playerbullets.size(); i++)
