@@ -2,25 +2,36 @@ extern "C"{
 #include "gfx.h"
 }
 #include <iostream>
+#include <vector>
+#include <stdlib.h>
+#include <time.h>
 class AlienBase
 {
 
 	protected:
 	int x;
 	int y;
-	bool move_right;
 
 	public:
-
+	bool move_right;
+      std::vector<std::vector<int>> bounds;
 	AlienBase(int xi, int yi)
 	{
 		x = xi;
 		y = yi;
 		move_right = true;
+       	bounds = {{0}, {0}, {0}, {0}, {0}, {0}};
 	}
-	void print()
+	const int& x_val() const
 	{
-		std::cout << x << ", " << y << std::endl;
+		return x;
+	}
+
+	void printCoords()
+	{
+		for(auto bound: bounds)
+            std::cout << bound[0] << " " << bound[1] << " " << bound[2] << " " << bound[3] << std::endl;
+		std::cout << std::endl;
 	}
 
 	void draw_base()
@@ -31,12 +42,42 @@ class AlienBase
 		gfx_line(x, (y + 20), (x + 20), (y + 10));
 		gfx_line((x + 20), (y + 10), (x + 10), y);
 		gfx_line((x + 10), y, x, y);
+
 	}
 	virtual void draw_alien()
 	{
 	}
+	/*
+	void move(const bool& inc)
+	{
+
+//		std::cout << inc << ", " << move_right << " ; ";
+		if (inc && move_right)
+		{
+			y = y + 20;
+			move_right = false;
+			std::cout << move_right << std::endl;	
+		}
+		else if (inc && !move_right);
+		{
+			y = y + 20;
+			move_right = true;
+		}
+		if(move_right)
+		{
+			//std::cout << x << std::endl;
+			x = x + 1;
+			//std::cout << x << std::endl;
+		}
+		else
+			x = x -1;
+
+        	draw_alien();
+   		make_bounds();
+    	}*/
 	void move()
 	{
+		
 		if (x > gfx_xsize())
 		{
 			y = y + 20;
@@ -53,10 +94,39 @@ class AlienBase
 		}
 		else
 			x = x -1;
-		draw_alien();
+
+	        draw_alien();
+        	make_bounds();
+    	}
+
+    void make_bounds()
+    {
+        bounds[0] = {getX(), getY(), (getX() - 10), getY()};
+        bounds[1] = {(getX() - 10), getY(), (getX() - 20), (getY() + 10)};
+        bounds[2] = {(getX() - 20), (getY() + 10), getX(), (getY() + 20)};
+        bounds[3] = {getX(), (getY() + 20), (getX() + 20), (getY() + 10)};
+        bounds[4] = {(getX() + 20), (getY() + 10), (getX() + 10), getY()};
+        bounds[5] = {(getX() + 10), getY(), getX(), getY()};
 	}
 
+    int getX()
+    {
+        return x;
+    }
+
+    int getY()
+    {
+        return y;
+    }
+
+	friend bool operator==(const AlienBase&, const AlienBase&);
+
 };
+
+bool operator==(const AlienBase& a, const AlienBase& b)
+{
+	return a.x==b.x && a.y==b.y && a.move_right == b.move_right;
+}
 
 class GreenAlien : public AlienBase
 {
@@ -96,4 +166,84 @@ class BlueAlien : public AlienBase
 		gfx_color(0, 0, 255);
 		draw_base();
 	}
+};
+
+class BasicAlien : public AlienBase
+{
+	private:
+	int color;
+	public:
+	BasicAlien(int xi, int yi, const int& c) : AlienBase(xi, yi)
+	{
+		color = c;
+	}
+	void draw_alien() override
+	{
+//		std::cout << color << std::endl;
+		if(color == 0)
+		{
+			gfx_color(255, 0 , 0);
+//			std::cout << "red" << std::endl;
+		}
+		else if(color == 1)
+		{
+			gfx_color(0, 0, 255);
+//			std::cout << "blue" << std::endl;
+		}
+		else if(color == 2)
+		{
+			gfx_color(0, 255, 0);
+//			std::cout << "green" << std::endl;
+		}
+		draw_base();
+	}
+};
+
+
+class AlienArmy
+{
+	private:
+	int rows;
+	int columns;
+	std::vector<std::vector<BasicAlien>> alien_array;
+	public:
+	AlienArmy(int r, int c)
+	{
+		rows = r;
+		columns = c;
+		build_army();
+	}
+
+	void build_army()
+	{
+
+		int col_inc = gfx_xsize() / columns;
+		srand(time(0));
+		for(int i = 0; i < rows; i++)
+		{
+			std::vector<BasicAlien> alien_row;
+			for(int z = 0; z < columns; z++)
+			{
+				unsigned int color = rand() % 3;
+				BasicAlien alien(((col_inc / 2) + col_inc*z),
+						(i*50 + 25), color);
+				alien.draw_alien();
+				alien_row.push_back(alien);
+			}
+			alien_array.push_back(alien_row);
+		}
+	}
+	void move_army()
+	{
+		for(auto rows: alien_array)
+		{
+			for(auto alien: rows)
+			{
+				alien.move();
+			}
+		}
+	}
+
+
+
 };
