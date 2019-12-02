@@ -40,6 +40,7 @@ bool intersected(vector<int> seg1, vector<int> seg2)
 			return false;
 	}
 }
+
 int main()
 {
 	gfx_open(500, 500, "Space Potaters");
@@ -51,10 +52,11 @@ int main()
 	//draw_polygon(x, y, 5);
 	gfx_color(0, 255, 0);
 	//draw_circle(250, 250, 50);
-	AlienArmy army(4, 7);
+
 
 	gfx_flush();
 	usleep(4000000);
+	AlienArmy army(4, 7);
 	
 	GreenAlien alien1(250, 250);
 	alien1.draw_alien();
@@ -71,12 +73,13 @@ int main()
 	aliens.push_back(alien2);
 	aliens.push_back(alien3);
 	std::string dir = " ";
-    clock_t deltaT;
-    double dt;
+    	clock_t deltaT;
+    	double dt;
 	bool canFire;
 	while(true)
 	{
-        deltaT = clock();
+
+        	deltaT = clock();
 		if(gfx_event_waiting())
 		{
 			int button = gfx_wait();
@@ -84,7 +87,7 @@ int main()
 			if ((button == 81 || button == 65430 || button == 65361)&&(dir != "L"))
 			{
 			//	gfx_clear();
-                dir = "L";
+               	 		dir = "L";
 				ship.move("L", dt);
 			}
 
@@ -92,7 +95,7 @@ int main()
 			else if ((button == 83 || button == 65432 || button == 65363)&&(dir != "R"))
 			{
 			//	gfx_clear();
-                dir = "R";
+                		dir = "R";
 				ship.move("R", dt);
 			}
 
@@ -120,29 +123,31 @@ int main()
 			if(button == 27)
 				break;
 		}
+
 		else
 		{
 			usleep(16667);
 			gfx_clear();
-            deltaT = (clock() - deltaT);
-            dt = (double)deltaT/1000.0f;
+            		deltaT = (clock() - deltaT);
+            		dt = (double)deltaT/1000.0f;
+			//std::cout << dir << "  " << dt << std::endl;
 
-            //Update movement after calculating deltaT
-       	    army.move_army();
-       	    alien1.move();
+            		//Update movement after calculating deltaT
+       	    		//army.move_army();
+       	    		alien1.move();
 			alien2.move();
 			alien3.move();
-			//for(auto alien: aliens)
-			//	alien.move();
+			for(auto alien: aliens)
+				alien.move();
 			ship.move(dir, dt);
 			ship.draw_base();
 			for(int i = 0; i < ship.playerbullets.size(); i++)
 			{
 				ship.playerbullets[i].move(dt);
-                if(ship.playerbullets[i].getY() < 0)
-                {
-                    ship.playerbullets.erase(ship.playerbullets.begin() + i);
-                }
+                		if(ship.playerbullets[i].getY() < 0)
+                		{
+                    			ship.playerbullets.erase(ship.playerbullets.begin() + i);
+                		}
 			}
 
 			//Collision Detection
