@@ -14,7 +14,7 @@ class AlienBase
 
 	public:
 	bool move_right;
-      std::vector<std::vector<int>> bounds;
+    std::vector<std::vector<int>> bounds;
 	AlienBase(int xi, int yi)
 	{
 		x = xi;
@@ -78,26 +78,46 @@ class AlienBase
 	void move()
 	{
 		
-		if (x > gfx_xsize())
+		/*if (x > gfx_xsize())
 		{
-			y = y + 20;
+			//y = y + 20;
 			move_right = false;
 		}
+		
 		else if (x < 0)
 		{
-			y = y + 20;
+			//y = y + 20;
 			move_right = true;
-		}
+		}*/
+		
 		if(move_right)
 		{
 			x = x + 1;
 		}
+		
 		else
 			x = x -1;
 
-	        draw_alien();
-        	make_bounds();
-    	}
+        draw_alien();
+    	make_bounds();
+	}
+	
+	void move_down()
+	{
+		y = y + 20;
+		switchDir();
+		move();
+	}
+	
+	void switchDir()
+	{
+		move_right = !move_right;
+	}
+	
+	bool hit_side()
+	{
+		return((x > gfx_xsize()) || (x < 0));
+	}
 
     void make_bounds()
     {
@@ -244,9 +264,22 @@ class AlienArmy
 	{
 		for(auto rows: alien_array)
 		{
+			bool side_hit = false;
 			for(auto alien: rows)
 			{
 				alien->move();
+				if(alien->hit_side())
+				{
+					side_hit = true;
+					break;
+				}
+			}
+			if(side_hit)
+			{
+				for(auto alien:rows)
+					alien->move_down();
+				side_hit = false;
+				break;
 			}
 		}
 	}
