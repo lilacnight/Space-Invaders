@@ -13,8 +13,11 @@ protected:
 	double y_pos;
 	int y_vel;
 	bool up;
+	int enabled;
 
 public:
+
+
     std::vector<int> bounds;
 	bullet(int x, int y, bool up = true, int speed = 30)
 	{
@@ -23,6 +26,7 @@ public:
 		up = up;
 		y_vel = speed;
         bounds = {0};
+	enabled = 1;
 	}
 	int getY()
 	{
@@ -30,13 +34,14 @@ public:
 	}
 	void draw()
 	{
+	//	std::cout << enabled << " , ";
 		gfx_color(255, 255, 255);
 		gfx_line(x_pos, y_pos, x_pos, y_pos - 10);
-        bounds.clear();
-        bounds.push_back(x_pos);
-        bounds.push_back((int)y_pos);
-        bounds.push_back(x_pos);
-        bounds.push_back((int)(y_pos-10));
+		bounds.clear();
+       		bounds.push_back(x_pos);
+     		bounds.push_back((int)y_pos);
+    		bounds.push_back(x_pos);
+		bounds.push_back((int)(y_pos-10));
 	}
 	void move(double dt)
 	{
