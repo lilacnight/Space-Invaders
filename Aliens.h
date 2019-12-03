@@ -301,7 +301,6 @@ class AlienArmy
 			{
 				if(row[i] == alien)
 				{
-					//std::cout << "alien match " << row.size();
 					row[i]->color = 3;
 					//row.erase(row.begin() + i);
 					//std::cout << row.size();
