@@ -165,7 +165,7 @@ int main()
 							bool collided = intersected(bound, bullet.bounds);
 							if(collided)
 							{
-								std::cout << "HIT!" << std::endl;
+								ship.playerbullets.erase(ship.playerbullets.begin());	
 							}
 						}
 					}
