@@ -146,10 +146,11 @@ int main()
 			for(int i = 0; i < ship.playerbullets.size(); i++)
 			{
 				ship.playerbullets[i].move(dt);
-            		if(ship.playerbullets[i].getY() < 0)
-            		{
+
+            			if(ship.playerbullets[i].getY() < 0)
+            			{
                 			ship.playerbullets.erase(ship.playerbullets.begin() + i);
-            		}
+            			}
 			}
 
 			//Collision Detection
@@ -165,7 +166,7 @@ int main()
 							bool collided = intersected(bound, bullet.bounds);
 							if(collided)
 							{
-								ship.playerbullets.erase(ship.playerbullets.begin());	
+								
 							}
 						}
 					}
