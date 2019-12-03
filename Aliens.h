@@ -1,6 +1,7 @@
 extern "C"{
 #include "gfx.h"
 }
+#include <bits/stdc++.h>
 #include <iostream>
 #include <vector>
 #include <stdlib.h>
@@ -25,6 +26,10 @@ class AlienBase
 	const int& x_val() const
 	{
 		return x;
+	}
+	const int& y_val() const
+	{
+		return y;
 	}
 
 	void printCoords()
@@ -280,6 +285,23 @@ class AlienArmy
 					alien->move_down();
 				side_hit = false;
 				break;
+			}
+		}
+	}
+
+	void pop_alien(BasicAlien* alien)
+	{
+		for(auto row: alien_array)
+		{
+			for(int i = 0; i < row.size(); i++)
+			{
+				if(row[i] == alien)
+				{
+					std::cout << "alien match " << row.size();
+					row.erase(row.begin() + i);
+					std::cout << row.size();
+					return;
+				}
 			}
 		}
 	}

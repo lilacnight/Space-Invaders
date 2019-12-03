@@ -165,6 +165,7 @@ int main()
 							bool collided = intersected(bound, bullet.bounds);
 							if(collided)
 							{
+								army.pop_alien(alien);
 								std::cout << "HIT!" << std::endl;
 							}
 						}
