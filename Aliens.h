@@ -14,7 +14,7 @@ class AlienBase
 
 	public:
 	bool move_right;
-      std::vector<std::vector<int>> bounds;
+    std::vector<std::vector<int>> bounds;
 	AlienBase(int xi, int yi)
 	{
 		x = xi;
@@ -78,26 +78,46 @@ class AlienBase
 	void move()
 	{
 		
-		if (x > gfx_xsize())
+		/*if (x > gfx_xsize())
 		{
-			y = y + 20;
+			//y = y + 20;
 			move_right = false;
 		}
+		
 		else if (x < 0)
 		{
-			y = y + 20;
+			//y = y + 20;
 			move_right = true;
-		}
+		}*/
+		
 		if(move_right)
 		{
 			x = x + 1;
 		}
+		
 		else
 			x = x -1;
 
-	        draw_alien();
-        	make_bounds();
-    	}
+        draw_alien();
+    	make_bounds();
+	}
+	
+	void move_down()
+	{
+		y = y + 20;
+		switchDir();
+		move();
+	}
+	
+	void switchDir()
+	{
+		move_right = !move_right;
+	}
+	
+	bool hit_side()
+	{
+		return((x > gfx_xsize()) || (x < 0));
+	}
 
     void make_bounds()
     {
@@ -141,6 +161,7 @@ class GreenAlien : public AlienBase
 	}
 
 };
+
 class RedAlien : public AlienBase
 {
 	public:
@@ -205,13 +226,18 @@ class AlienArmy
 	private:
 	int rows;
 	int columns;
-	std::vector<std::vector<BasicAlien>> alien_array;
+	std::vector<std::vector<BasicAlien*>> alien_array;
 	public:
 	AlienArmy(int r, int c)
 	{
 		rows = r;
 		columns = c;
 		build_army();
+	}
+	
+	size_t size()
+	{
+		return alien_array.size();
 	}
 
 	void build_army()
@@ -221,29 +247,45 @@ class AlienArmy
 		srand(time(0));
 		for(int i = 0; i < rows; i++)
 		{
-			std::vector<BasicAlien> alien_row;
+			std::vector<BasicAlien*> alien_row;
 			for(int z = 0; z < columns; z++)
 			{
 				unsigned int color = rand() % 3;
-				BasicAlien alien(((col_inc / 2) + col_inc*z),
-						(i*50 + 25), color);
-				alien.draw_alien();
-				alien_row.push_back(alien);
+				/*BasicAlien alien(((col_inc / 2) + col_inc*z),
+						(i*50 + 25), color);*/
+				//alien.draw_alien();
+				alien_row.push_back(new BasicAlien (((col_inc / 2) + col_inc*z),(i*50 + 25), color));
 			}
 			alien_array.push_back(alien_row);
 		}
 	}
+	
 	void move_army()
 	{
 		for(auto rows: alien_array)
 		{
+			bool side_hit = false;
 			for(auto alien: rows)
 			{
-				alien.move();
+				alien->move();
+				if(alien->hit_side())
+				{
+					side_hit = true;
+					break;
+				}
+			}
+			if(side_hit)
+			{
+				for(auto alien:rows)
+					alien->move_down();
+				side_hit = false;
+				break;
 			}
 		}
 	}
-
-
-
+	
+	std::vector<BasicAlien*> operator[](size_t index)
+	{
+		return alien_array.at(index);
+	}
 };

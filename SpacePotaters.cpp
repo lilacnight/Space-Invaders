@@ -40,6 +40,7 @@ bool intersected(vector<int> seg1, vector<int> seg2)
 			return false;
 	}
 }
+
 int main()
 {
 	gfx_open(500, 500, "Space Potaters");
@@ -51,32 +52,35 @@ int main()
 	//draw_polygon(x, y, 5);
 	gfx_color(0, 255, 0);
 	//draw_circle(250, 250, 50);
-	AlienArmy army(4, 7);
 
-	gfx_flush();
-	usleep(4000000);
+
+	/*gfx_flush();
+	usleep(4000000);*/
+	AlienArmy army(4, 7);
 	
-	GreenAlien alien1(250, 250);
+	/*GreenAlien alien1(250, 250);
 	alien1.draw_alien();
 	RedAlien alien2(100, 50);
 	alien2.draw_alien();
 	BlueAlien alien3(200, 50);
-	alien3.draw_alien();
+	alien3.draw_alien();*/
 	ship_base ship;
 	ship.draw_base();
 
 	std::vector<bullet> bullet_list;
-	std::vector<AlienBase> aliens;
-	aliens.push_back(alien1);
-	aliens.push_back(alien2);
-	aliens.push_back(alien3);
+	/*std::vector<AlienBase*> aliens;
+	aliens.push_back(new GreenAlien(250, 250));
+	aliens.push_back(new BlueAlien(100, 50));
+	aliens.push_back(new RedAlien(200, 50));*/
+	
 	std::string dir = " ";
-    clock_t deltaT;
-    double dt;
+	clock_t deltaT;
+	double dt;
 	bool canFire;
 	while(true)
 	{
-        deltaT = clock();
+
+    	deltaT = clock();
 		if(gfx_event_waiting())
 		{
 			int button = gfx_wait();
@@ -84,7 +88,7 @@ int main()
 			if ((button == 81 || button == 65430 || button == 65361)&&(dir != "L"))
 			{
 			//	gfx_clear();
-                dir = "L";
+       	 		dir = "L";
 				ship.move("L", dt);
 			}
 
@@ -92,7 +96,7 @@ int main()
 			else if ((button == 83 || button == 65432 || button == 65363)&&(dir != "R"))
 			{
 			//	gfx_clear();
-                dir = "R";
+        		dir = "R";
 				ship.move("R", dt);
 			}
 
@@ -109,8 +113,9 @@ int main()
 			if(button == 112)
 			{
 				std::cout << "---Aliens---" << std::endl;
-				for(auto alien:aliens)
-					alien.printCoords();
+				for(int i = 0; i < army.size(); i++)
+					for(auto alien:army[i])
+						alien->printCoords();
 				std::cout << "---Bullets---" << std::endl;
 				for(auto bullet:ship.playerbullets)
 					std::cout << "(" << bullet.bounds[0] << ", " << bullet.bounds[1] << ") (" << bullet.bounds[2] << ", " << bullet.bounds[3] << ")" << std::endl;
@@ -120,41 +125,49 @@ int main()
 			if(button == 27)
 				break;
 		}
+
 		else
 		{
 			usleep(16667);
 			gfx_clear();
-            deltaT = (clock() - deltaT);
-            dt = (double)deltaT/1000.0f;
+    		deltaT = (clock() - deltaT);
+    		dt = (double)deltaT/1000.0f;
+			//std::cout << dir << "  " << dt << std::endl;
 
-            //Update movement after calculating deltaT
-       	    army.move_army();
-       	    alien1.move();
-			alien2.move();
-			alien3.move();
-			//for(auto alien: aliens)
-			//	alien.move();
+    		//Update movement after calculating deltaT
+    		army.move_army();
+    		//alien1.move();
+			//alien2.move();
+			//alien3.move();
+			/*for(auto alien: aliens)
+				alien->move();*/
 			ship.move(dir, dt);
 			ship.draw_base();
 			for(int i = 0; i < ship.playerbullets.size(); i++)
 			{
 				ship.playerbullets[i].move(dt);
-                if(ship.playerbullets[i].getY() < 0)
-                {
-                    ship.playerbullets.erase(ship.playerbullets.begin() + i);
-                }
+            		if(ship.playerbullets[i].getY() < 0)
+            		{
+                			ship.playerbullets.erase(ship.playerbullets.begin() + i);
+            		}
 			}
 
 			//Collision Detection
 			
 			for(auto bullet: ship.playerbullets)
 			{
-				for (auto bound: alien1.bounds)
+				for(int i = 0; i < army.size(); i++)
 				{
-					bool collided = intersected(bound, bullet.bounds);
-					if(collided)
+					for(auto alien:army[i])
 					{
-						std::cout << "HIT!" << std::endl;
+						for (auto bound: alien->bounds)
+						{
+							bool collided = intersected(bound, bullet.bounds);
+							if(collided)
+							{
+								std::cout << "HIT!" << std::endl;
+							}
+						}
 					}
 				}
 			}

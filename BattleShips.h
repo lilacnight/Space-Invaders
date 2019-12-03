@@ -58,9 +58,10 @@ class ship_base
 	public:
 	float dt;
 	float acc;
-    float vel;
+    	float vel;
 	std::vector<bullet> playerbullets;
-    std::vector<std::vector<int>> bounds;
+    	std::vector<std::vector<int>> bounds;
+	
 	ship_base()
 	{
 		x = 20;
@@ -78,20 +79,21 @@ class ship_base
 
 	void draw_base()
 	{
+		
 		gfx_color(255, 0, 255);
 		gfx_line(x, y, x - 10, y + 20);
 		gfx_line(x - 10, y + 20, x + 10, y + 20);
 		gfx_line(x + 10, y + 20, x, y);
 
-        std::vector<int> bound = {x, y, x - 10, y + 20};
-        bounds.push_back(bound);
-        bound.clear();
-        bound = {x - 10, y + 20, x + 10, y + 20};
-        bounds.push_back(bound);
-        bound.clear();
-        bound = {x + 10, y + 20, x, y};
-        bounds.push_back(bound);
-        bound.clear();
+        	std::vector<int> bound = {x, y, x - 10, y + 20};
+        	bounds.push_back(bound);
+        	bound.clear();
+        	bound = {x - 10, y + 20, x + 10, y + 20};
+        	bounds.push_back(bound);
+        	bound.clear();
+        	bound = {x + 10, y + 20, x, y};
+        	bounds.push_back(bound);
+        	bound.clear();
 
 	}
 
@@ -102,23 +104,23 @@ class ship_base
 
 	void move(std::string dir, double dt)
 	{
-        if(dir == "R")
-        {
-		    if(!(x + 17 > gfx_xsize()))
-			    x += vel * dt;
-        }
-        else if(dir == "L")
-        {
-            if(!(x - 17 <= 0))
-    			x -= vel * dt;
-        }
-        
-		draw_ship();
+        	if(dir == "R")
+        	{
+		    	if(!(x + 17 > gfx_xsize()))
+			    	x += vel * dt;
+        	}
+        	else if(dir == "L")
+        	{
+            		if(!(x - 17 <= 0))
+    				x -= vel * dt;
+        	}
+
+		draw_ship();        
 	}
 
 	void fire()
 	{
-        bullet b(x, y-2);
+        	bullet b(x, y-2);
 		playerbullets.push_back(b);
 	}
 };
