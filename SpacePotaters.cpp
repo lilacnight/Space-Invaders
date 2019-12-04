@@ -4,6 +4,7 @@
 extern "C"{
 #include "gfx.h"
 }
+#include "Score.h"
 #include "Aliens.h"
 #include "BattleShips.h"
 #include <algorithm>
@@ -43,6 +44,7 @@ bool intersected(vector<int> seg1, vector<int> seg2)
 
 int main()
 {
+	int score = 0;
 	
 	gfx_open(1000, 500, "Space Potaters");
 
@@ -124,7 +126,10 @@ int main()
 
 			//std::cout << "got event: " << button << std::endl;
 			if(button == 27)
+			{
+				WriteScore(score);
 				break;
+			}
 		}
 
 		else
@@ -169,6 +174,7 @@ int main()
 							{
 								army.pop_alien(alien);
 								ship.coll();
+								score = score + 100;
 							}
 						}
 					}
