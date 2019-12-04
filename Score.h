@@ -6,7 +6,7 @@ using namespace std;
 
 void WriteScore(int value)
 {
-	ofstream file ("test.txt");
+	ofstream file ("Score.txt");
 	if(file.is_open())
 	{
 		file << "Your score is " << value << endl;

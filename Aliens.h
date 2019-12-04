@@ -9,7 +9,7 @@ extern "C"{
 
 std::vector<int> cycleColors(int speed)
 {
-	std::vector<int> rgb = {255, 0, 0}
+	std::vector<int> rgb = {255, 0, 0};
 	if(rgb[0] = 255)
 	{
 		rgb[1] += 1;
