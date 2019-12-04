@@ -118,6 +118,11 @@ class ship_base
 		draw_ship();        
 	}
 
+	void collide()
+	{
+
+	}
+
 	void fire()
 	{
         	bullet b(x, y-2);
