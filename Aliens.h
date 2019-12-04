@@ -6,6 +6,21 @@ extern "C"{
 #include <vector>
 #include <stdlib.h>
 #include <time.h>
+
+std::vector<int> cycleColors(int speed)
+{
+	std::vector<int> rgb = {255, 0, 0}
+	if(rgb[0] = 255)
+	{
+		rgb[1] += 1;
+	}
+	if(rgb[1] = 255)
+	{
+		rgb[0] -= 1;
+		rgb[2] += 1;
+	}
+}
+
 class AlienBase
 {
 
@@ -15,6 +30,7 @@ class AlienBase
 
 	public:
 	bool move_right;
+	bool isDead;
     std::vector<std::vector<int>> bounds;
 	AlienBase(int xi, int yi)
 	{
@@ -22,6 +38,7 @@ class AlienBase
 		y = yi;
 		move_right = true;
        	bounds = {{0}, {0}, {0}, {0}, {0}, {0}};
+       	isDead = false;
 	}
 	const int& x_val() const
 	{
@@ -52,59 +69,22 @@ class AlienBase
 	virtual void draw_alien()
 	{
 	}
-	/*
-	void move(const bool& inc)
-	{
 
-//		std::cout << inc << ", " << move_right << " ; ";
-		if (inc && move_right)
-		{
-			y = y + 20;
-			move_right = false;
-			std::cout << move_right << std::endl;	
-		}
-		else if (inc && !move_right);
-		{
-			y = y + 20;
-			move_right = true;
-		}
-		if(move_right)
-		{
-			//std::cout << x << std::endl;
-			x = x + 1;
-			//std::cout << x << std::endl;
-		}
-		else
-			x = x -1;
-
-        	draw_alien();
-   		make_bounds();
-    	}*/
 	void move()
 	{
-		
-		/*if (x > gfx_xsize())
-		{
-			//y = y + 20;
-			move_right = false;
-		}
-		
-		else if (x < 0)
-		{
-			//y = y + 20;
-			move_right = true;
-		}*/
-		
-		if(move_right)
-		{
-			x = x + 1;
-		}
-		
-		else
-			x = x -1;
+		if(!isDead)
+		{	
+			if(move_right)
+			{
+				x = x + 1;
+			}
+			
+			else
+				x = x -1;
 
-        draw_alien();
-    	make_bounds();
+		    draw_alien();
+			make_bounds();
+		}
 	}
 	
 	void move_down()
@@ -144,6 +124,10 @@ class AlienBase
         return y;
     }
 
+	void remove_bounds()
+	{
+		bounds.clear();
+	}
 	friend bool operator==(const AlienBase&, const AlienBase&);
 
 };
@@ -271,9 +255,9 @@ class AlienArmy
 	
 	void move_army()
 	{
+		bool side_hit = false;
 		for(auto rows: alien_array)
 		{
-			bool side_hit = false;
 			for(auto alien: rows)
 			{
 				alien->move();
@@ -284,12 +268,17 @@ class AlienArmy
 				}
 			}
 			if(side_hit)
+				break;
+		}
+		
+		if(side_hit)
+		{
+			for(auto rows: alien_array)
 			{
 				for(auto alien:rows)
 					alien->move_down();
-				side_hit = false;
-				break;
 			}
+			side_hit = false;
 		}
 	}
 
@@ -302,6 +291,9 @@ class AlienArmy
 				if(row[i] == alien)
 				{
 					row[i]->color = 3;
+					if(alien->isDead == false)
+						alien->remove_bounds();
+					alien->isDead = true;
 					//row.erase(row.begin() + i);
 					//std::cout << row.size();
 					return;
