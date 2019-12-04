@@ -25,8 +25,8 @@ public:
 		y_pos = y;
 		up = up;
 		y_vel = speed;
-        bounds = {0};
-	enabled = 1;
+        	bounds = {0};
+		enabled = 1;
 	}
 	int getY()
 	{
@@ -71,7 +71,7 @@ class ship_base
 	{
 		x = 20;
 		y = gfx_ysize() - 30;
-		vel = 30.0f;
+		vel = 60.0f;
 	}
 	int x_val()
 	{
@@ -123,9 +123,10 @@ class ship_base
 		draw_ship();        
 	}
 
-	void collide()
+	void coll()
 	{
-
+		bullet b(x,y*-1);
+		playerbullets[0] = b;
 	}
 
 	void fire()

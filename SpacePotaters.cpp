@@ -44,7 +44,7 @@ bool intersected(vector<int> seg1, vector<int> seg2)
 int main()
 {
 	
-	gfx_open(500, 500, "Space Potaters");
+	gfx_open(1000, 500, "Space Potaters");
 
 	int x[] = {30, 50, 23, 17, 120};
 	int y[] = {12, 55, 52, 19, 100};
@@ -68,7 +68,7 @@ int main()
 	ship_base ship;
 	ship.draw_base();
 
-	std::vector<bullet> bullet_list;
+	//std::vector<bullet> bullet_list;
 	/*std::vector<AlienBase*> aliens;
 	aliens.push_back(new GreenAlien(250, 250));
 	aliens.push_back(new BlueAlien(100, 50));
@@ -168,7 +168,7 @@ int main()
 							if(collided)
 							{
 								army.pop_alien(alien);
-								ship.playerbullets.erase(ship.playerbullets.begin());
+								ship.coll();
 							}
 						}
 					}
