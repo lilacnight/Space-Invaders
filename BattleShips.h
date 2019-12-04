@@ -112,12 +112,12 @@ class ship_base
         	if(dir == "R")
         	{
 		    	if(!(x + 17 > gfx_xsize()))
-			    	x += vel * dt;
+			    	x += (vel * dt) + 3;
         	}
         	else if(dir == "L")
         	{
             		if(!(x - 17 <= 0))
-    				x -= vel * dt;
+    				x -= (vel * dt) + 3;
         	}
 
 		draw_ship();        
