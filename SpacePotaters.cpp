@@ -43,6 +43,7 @@ bool intersected(vector<int> seg1, vector<int> seg2)
 
 int main()
 {
+	
 	gfx_open(500, 500, "Space Potaters");
 
 	int x[] = {30, 50, 23, 17, 120};
@@ -166,6 +167,7 @@ int main()
 							bool collided = intersected(bound, bullet.bounds);
 							if(collided)
 							{
+								army.pop_alien(alien);
 								ship.playerbullets.erase(ship.playerbullets.begin());
 							}
 						}

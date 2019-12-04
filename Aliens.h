@@ -1,6 +1,7 @@
 extern "C"{
 #include "gfx.h"
 }
+#include <bits/stdc++.h>
 #include <iostream>
 #include <vector>
 #include <stdlib.h>
@@ -25,6 +26,10 @@ class AlienBase
 	const int& x_val() const
 	{
 		return x;
+	}
+	const int& y_val() const
+	{
+		return y;
 	}
 
 	void printCoords()
@@ -191,9 +196,9 @@ class BlueAlien : public AlienBase
 
 class BasicAlien : public AlienBase
 {
-	private:
-	int color;
+
 	public:
+	int color;
 	BasicAlien(int xi, int yi, const int& c) : AlienBase(xi, yi)
 	{
 		color = c;
@@ -215,6 +220,10 @@ class BasicAlien : public AlienBase
 		{
 			gfx_color(0, 255, 0);
 //			std::cout << "green" << std::endl;
+		}
+		else if(color == 3)
+		{
+			gfx_color(0, 0, 0);
 		}
 		draw_base();
 	}
@@ -280,6 +289,23 @@ class AlienArmy
 					alien->move_down();
 				side_hit = false;
 				break;
+			}
+		}
+	}
+
+	void pop_alien(BasicAlien* alien)
+	{
+		for(auto row: alien_array)
+		{
+			for(int i = 0; i < row.size(); i++)
+			{
+				if(row[i] == alien)
+				{
+					row[i]->color = 3;
+					//row.erase(row.begin() + i);
+					//std::cout << row.size();
+					return;
+				}
 			}
 		}
 	}
