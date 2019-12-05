@@ -131,7 +131,10 @@ class ship_base
 
 	void fire()
 	{
+		if(playerbullets.size() < 2)
+		{
         	bullet b(x, y-2);
-		playerbullets.push_back(b);
+			playerbullets.push_back(b);
+		}
 	}
 };

@@ -6,24 +6,28 @@ extern "C"{
 #include <vector>
 #include <stdlib.h>
 #include <time.h>
+#include <cmath>
 
-std::vector<int> cycleColors(int speed)
+std::vector<int> cycleColors(int r, int g, int b)
 {
 	std::vector<int> rgb = {255, 0, 0};
-	if(rgb[0] = 255)
-	{
-		rgb[1] += 1;
-	}
-	if(rgb[1] = 255)
-	{
-		rgb[0] -= 1;
-		rgb[2] += 1;
-	}
+	if ((rgb[0] == 255) && (rgb[1] < 255) && (rgb[2] == 0))
+        rgb[1] += 1;
+    if ((rgb[0] > 0) && (rgb[1] == 255) && (rgb[2] == 0))
+        rgb[0] -= 1;
+    if ((rgb[0] == 0) && (rgb[1] == 255) && (rgb[2] < 255))
+        rgb[2] += 1;
+    if ((rgb[0] == 0) && (rgb[1] > 0) && (rgb[2] == 255))
+        rgb[1] -= 1;
+    if ((rgb[0] < 255) && (rgb[1] == 0) && (rgb[2] == 255))
+        rgb[0] += 1;
+    if ((rgb[0] == 255) && (rgb[1] == 0) && (rgb[2] > 0))
+        rgb[2] -= 1;
+    return rgb;
 }
 
 class AlienBase
 {
-
 	protected:
 	int x;
 	int y;
@@ -70,7 +74,7 @@ class AlienBase
 	{
 	}
 
-	void move()
+	virtual void move()
 	{
 		if(!isDead)
 		{	
@@ -136,6 +140,64 @@ bool operator==(const AlienBase& a, const AlienBase& b)
 {
 	return a.x==b.x && a.y==b.y && a.move_right == b.move_right;
 }
+
+class Mother : public AlienBase
+{
+	private:
+	float yPos;
+	float xPos;
+	public:
+	std::vector<int> color;
+	Mother(int xi, int yi) : AlienBase(xi, yi)
+	{
+		color = {255, 0, 0};
+		yPos = y;
+	}
+	
+	void cycleColors()
+	{
+		if ((color[0] == 255) && (color[1] < 255) && (color[2] == 0))
+			color[1] += 15;
+		if ((color[0] > 0) && (color[1] == 255) && (color[2] == 0))
+			color[0] -= 15;
+		if ((color[0] == 0) && (color[1] == 255) && (color[2] < 255))
+			color[2] += 15;
+		if ((color[0] == 0) && (color[1] > 0) && (color[2] == 255))
+			color[1] -= 15;
+		if ((color[0] < 255) && (color[1] == 0) && (color[2] == 255))
+			color[0] += 15;
+		if ((color[0] == 255) && (color[1] == 0) && (color[2] > 0))
+			color[2] -= 15;
+	}
+	
+	void draw_alien() override
+	{
+		cycleColors();
+		gfx_color(color[0], color[1], color[2]);
+		draw_base();
+	}
+	
+	void move() override
+	{
+		if(!isDead)
+		{	
+			if(x < gfx_xsize())
+			{
+				xPos = xPos + 2.5f;
+				yPos = yPos+std::sin(x/10) * 3.5f;
+				y = (int)yPos;
+				x = (int)xPos;
+				draw_alien();
+				make_bounds();
+			}
+		}
+	}
+	void kill()
+	{
+		isDead = true;
+		remove_bounds();
+	}
+};
 
 class GreenAlien : public AlienBase
 {
@@ -241,7 +303,7 @@ class AlienArmy
 		for(int i = 0; i < rows; i++)
 		{
 			std::vector<BasicAlien*> alien_row;
-			for(int z = 0; z < columns; z++)
+			for(int z = 0; z < columns; z-=-1)
 			{
 				unsigned int color = rand() % 3;
 				/*BasicAlien alien(((col_inc / 2) + col_inc*z),
