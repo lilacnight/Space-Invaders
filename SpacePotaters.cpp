@@ -11,6 +11,7 @@ extern "C"{
 #include <vector>
 #include <time.h>
 #include <string>
+#include <stdlib.h>
 using namespace std;
 
 bool intersected(vector<int> seg1, vector<int> seg2)
@@ -42,6 +43,12 @@ bool intersected(vector<int> seg1, vector<int> seg2)
 	}
 }
 
+int randomEncounter(int val)
+{
+	srand(time(0));
+	return rand() % val + 101;
+}
+
 int main()
 {
 	int score = 0;
@@ -57,14 +64,27 @@ int main()
 	
 	ship_base ship;
 	ship.draw_base();
+	
+	std::vector<Mother*> bonusShips;
 
 	std::string dir = " ";
 	clock_t deltaT;
 	double dt;
 	bool canFire;
+	int iterCount = 0;
+	int spawnChance = 900;
 	while(true)
 	{
-
+		iterCount++;
+		if(iterCount > spawnChance)
+			iterCount = 0;
+		int re = randomEncounter(spawnChance);
+		if(iterCount == re)
+		{
+			bonusShips.push_back(new Mother(10, 200));
+			iterCount = 0;
+		}
+		
     	deltaT = clock();
 		if(gfx_event_waiting())
 		{
@@ -120,9 +140,14 @@ int main()
 
     		//Update movement after calculating deltaT
     		army.move_army();
-    		
 			ship.move(dir, dt);
 			ship.draw_base();
+			
+			for(auto mother:bonusShips)
+			{
+				mother->move();
+			}
+			
 			for(int i = 0; i < ship.playerbullets.size(); i++)
 			{
 				ship.playerbullets[i].move(dt);
@@ -149,6 +174,19 @@ int main()
 								ship.coll();
 								score = score + 100;
 							}
+						}
+					}
+				}
+				for(auto mother:bonusShips)
+				{
+					for(auto bound:mother->bounds)
+					{
+						bool collided = intersected(bound, bullet.bounds);
+						if(collided)
+						{
+							mother->kill();
+							ship.coll();
+							score = score + 500;
 						}
 					}
 				}

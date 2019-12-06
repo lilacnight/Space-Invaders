@@ -55,7 +55,7 @@ class AlienBase
 	{
 	}
 
-	void move()
+	virtual void move()
 	{
 		if(!isDead)
 		{	
@@ -121,6 +121,64 @@ bool operator==(const AlienBase& a, const AlienBase& b)
 {
 	return a.x==b.x && a.y==b.y && a.move_right == b.move_right;
 }
+
+class Mother : public AlienBase
+{
+	private:
+	float yPos;
+	float xPos;
+	public:
+	std::vector<int> color;
+	Mother(int xi, int yi) : AlienBase(xi, yi)
+	{
+		color = {255, 0, 0};
+		yPos = y;
+	}
+	
+	void cycleColors()
+	{
+		if ((color[0] == 255) && (color[1] < 255) && (color[2] == 0))
+			color[1] += 15;
+		if ((color[0] > 0) && (color[1] == 255) && (color[2] == 0))
+			color[0] -= 15;
+		if ((color[0] == 0) && (color[1] == 255) && (color[2] < 255))
+			color[2] += 15;
+		if ((color[0] == 0) && (color[1] > 0) && (color[2] == 255))
+			color[1] -= 15;
+		if ((color[0] < 255) && (color[1] == 0) && (color[2] == 255))
+			color[0] += 15;
+		if ((color[0] == 255) && (color[1] == 0) && (color[2] > 0))
+			color[2] -= 15;
+	}
+	
+	void draw_alien() override
+	{
+		cycleColors();
+		gfx_color(color[0], color[1], color[2]);
+		draw_base();
+	}
+	
+	void move() override
+	{
+		if(!isDead)
+		{	
+			if(x < gfx_xsize())
+			{
+				xPos = xPos + 2.5f;
+				yPos = yPos+std::sin(x/10) * 3.5f;
+				y = (int)yPos;
+				x = (int)xPos;
+				draw_alien();
+				make_bounds();
+			}
+		}
+	}
+	void kill()
+	{
+		isDead = true;
+		remove_bounds();
+	}
+};
 
 class GreenAlien : public AlienBase
 {
