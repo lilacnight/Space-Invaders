@@ -7,23 +7,8 @@ extern "C"{
 #include <stdlib.h>
 #include <time.h>
 
-std::vector<int> cycleColors(int speed)
-{
-	std::vector<int> rgb = {255, 0, 0};
-	if(rgb[0] = 255)
-	{
-		rgb[1] += 1;
-	}
-	if(rgb[1] = 255)
-	{
-		rgb[0] -= 1;
-		rgb[2] += 1;
-	}
-}
-
 class AlienBase
 {
-
 	protected:
 	int x;
 	int y;
