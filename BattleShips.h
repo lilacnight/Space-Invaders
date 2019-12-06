@@ -34,13 +34,12 @@ public:
 	}
 	void draw()
 	{
-	//	std::cout << enabled << " , ";
 		gfx_color(255, 255, 255);
 		gfx_line(x_pos, y_pos, x_pos, y_pos - 10);
 		bounds.clear();
-       		bounds.push_back(x_pos);
-     		bounds.push_back((int)y_pos);
-    		bounds.push_back(x_pos);
+   		bounds.push_back(x_pos);
+ 		bounds.push_back((int)y_pos);
+		bounds.push_back(x_pos);
 		bounds.push_back((int)(y_pos-10));
 	}
 	void move(double dt)
@@ -63,10 +62,10 @@ class ship_base
 	public:
 	float dt;
 	float acc;
-    	float vel;
+	float vel;
 	std::vector<bullet> playerbullets;
-    	std::vector<std::vector<int>> bounds;
-	
+	std::vector<std::vector<int>> bounds;
+
 	ship_base()
 	{
 		x = 20;
@@ -90,15 +89,15 @@ class ship_base
 		gfx_line(x - 10, y + 20, x + 10, y + 20);
 		gfx_line(x + 10, y + 20, x, y);
 
-        	std::vector<int> bound = {x, y, x - 10, y + 20};
-        	bounds.push_back(bound);
-        	bound.clear();
-        	bound = {x - 10, y + 20, x + 10, y + 20};
-        	bounds.push_back(bound);
-        	bound.clear();
-        	bound = {x + 10, y + 20, x, y};
-        	bounds.push_back(bound);
-        	bound.clear();
+    	std::vector<int> bound = {x, y, x - 10, y + 20};
+    	bounds.push_back(bound);
+    	bound.clear();
+    	bound = {x - 10, y + 20, x + 10, y + 20};
+    	bounds.push_back(bound);
+    	bound.clear();
+    	bound = {x + 10, y + 20, x, y};
+    	bounds.push_back(bound);
+    	bound.clear();
 
 	}
 
@@ -109,16 +108,16 @@ class ship_base
 
 	void move(std::string dir, double dt)
 	{
-        	if(dir == "R")
-        	{
-		    	if(!(x + 17 > gfx_xsize()))
-			    	x += (vel * dt) + 3;
-        	}
-        	else if(dir == "L")
-        	{
-            		if(!(x - 17 <= 0))
-    				x -= (vel * dt) + 3;
-        	}
+    	if(dir == "R")
+    	{
+	    	if(!(x + 17 > gfx_xsize()))
+		    	x += (vel * dt) + 3;
+    	}
+    	else if(dir == "L")
+    	{
+        		if(!(x - 17 <= 0))
+				x -= (vel * dt) + 3;
+    	}
 
 		draw_ship();        
 	}
@@ -131,7 +130,7 @@ class ship_base
 
 	void fire()
 	{
-        	bullet b(x, y-2);
+    	bullet b(x, y-2);
 		playerbullets.push_back(b);
 	}
 };

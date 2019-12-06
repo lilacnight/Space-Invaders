@@ -189,21 +189,17 @@ class BasicAlien : public AlienBase
 	}
 	void draw_alien() override
 	{
-//		std::cout << color << std::endl;
 		if(color == 0)
 		{
 			gfx_color(255, 0 , 0);
-//			std::cout << "red" << std::endl;
 		}
 		else if(color == 1)
 		{
 			gfx_color(0, 0, 255);
-//			std::cout << "blue" << std::endl;
 		}
 		else if(color == 2)
 		{
 			gfx_color(0, 255, 0);
-//			std::cout << "green" << std::endl;
 		}
 		else if(color == 3)
 		{
@@ -244,9 +240,6 @@ class AlienArmy
 			for(int z = 0; z < columns; z++)
 			{
 				unsigned int color = rand() % 3;
-				/*BasicAlien alien(((col_inc / 2) + col_inc*z),
-						(i*50 + 25), color);*/
-				//alien.draw_alien();
 				alien_row.push_back(new BasicAlien (((col_inc / 2) + col_inc*z),(i*50 + 25), color));
 			}
 			alien_array.push_back(alien_row);
@@ -294,8 +287,6 @@ class AlienArmy
 					if(alien->isDead == false)
 						alien->remove_bounds();
 					alien->isDead = true;
-					//row.erase(row.begin() + i);
-					//std::cout << row.size();
 					return;
 				}
 			}
